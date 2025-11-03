@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using CodeQuest.Factories;
+using CodeQuest.Database;
 using CodeQuest.Models;
 using CodeQuest.Utils;
 
@@ -9,20 +9,16 @@ namespace CodeQuest.Repositories
 {
     /// <summary>
     /// Repositorio para operaciones de usuarios en la base de datos
-    /// Implementa IUserRepository (Abstracción) y manejo de errores con try-catch
+    /// Implementa IUserRepository (Abstracción) y usa el patrón Singleton para conexiones
     /// </summary>
     public class UserRepository : IUserRepository
     {
-        private readonly IDatabaseConnectionFactory connectionFactory;
-
         /// <summary>
-        /// Constructor que recibe la factory de conexiones (Inyección de Dependencias)
+        /// Constructor que usa el Singleton DbConnection
         /// </summary>
-        /// <param name="connectionFactory">Factory para crear conexiones a la base de datos</param>
-        /// <exception cref="ArgumentNullException">Se lanza cuando connectionFactory es null</exception>
-        public UserRepository(IDatabaseConnectionFactory connectionFactory)
+        public UserRepository()
         {
-            this.connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+            // No necesita parámetros ya que usa el Singleton
         }
 
         /// <summary>
@@ -48,7 +44,7 @@ namespace CodeQuest.Repositories
 
                 username = username.Trim();
 
-                using (var connection = connectionFactory.CreateConnection())
+                using (var connection = DbConnection.GetConnection())
                 {
                     connection.Open();
                     using (var command = new SqlCommand("spUser_New", connection))
@@ -102,7 +98,7 @@ namespace CodeQuest.Repositories
 
                 username = username.Trim();
 
-                using (var connection = connectionFactory.CreateConnection())
+                using (var connection = DbConnection.GetConnection())
                 {
                     connection.Open();
                     using (var command = new SqlCommand("SELECT COUNT(*) FROM Users WHERE Username = @username", connection))
@@ -133,7 +129,7 @@ namespace CodeQuest.Repositories
 
         public int GetUserId(string username)
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("SELECT UserID FROM Users WHERE Username = @username", connection))
@@ -151,7 +147,7 @@ namespace CodeQuest.Repositories
 
         public User GetUserById(int userId)
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("SELECT UserID, Username, Xp, Level, CreatedAt FROM Users WHERE UserID = @userId", connection))

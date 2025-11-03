@@ -1,24 +1,28 @@
 using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
-using CodeQuest.Factories;
+using CodeQuest.Database;
 using CodeQuest.Models;
 using CodeQuest.Utils;
 
 namespace CodeQuest.Repositories
 {
+    /// <summary>
+    /// Repositorio para operaciones de rondas usando el patrón Singleton para conexiones
+    /// </summary>
     public class RoundRepository : IRoundRepository
     {
-        private readonly IDatabaseConnectionFactory connectionFactory;
-
-        public RoundRepository(IDatabaseConnectionFactory connectionFactory)
+        /// <summary>
+        /// Constructor que usa el Singleton DbConnection
+        /// </summary>
+        public RoundRepository()
         {
-            this.connectionFactory = connectionFactory;
+            // No necesita parámetros ya que usa el Singleton
         }
 
         public int CreateRound(int userId)
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("spRounds_New", connection))
@@ -38,7 +42,7 @@ namespace CodeQuest.Repositories
 
         public void SubmitAnswer(int roundId, int questionId, int choiceId, int timeSpentSec)
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("spRounds_Answer", connection))
@@ -56,7 +60,7 @@ namespace CodeQuest.Repositories
 
         public RoundResult CloseRound(int roundId)
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("spRounds_Close", connection))
@@ -85,7 +89,7 @@ namespace CodeQuest.Repositories
 
         public DataTable GetTopRanking()
         {
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 using (var command = new SqlCommand("spUsers_TopRanking", connection))

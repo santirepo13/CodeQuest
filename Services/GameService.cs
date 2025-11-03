@@ -5,20 +5,25 @@ using CodeQuest.Repositories;
 
 namespace CodeQuest.Services
 {
+    /// <summary>
+    /// Servicio principal del juego que coordina todas las operaciones
+    /// Usa el patrón Singleton para conexiones a través de los repositorios
+    /// </summary>
     public class GameService : IGameService
     {
         private readonly IUserRepository userRepository;
         private readonly IQuestionRepository questionRepository;
         private readonly IRoundRepository roundRepository;
 
-        public GameService(
-            IUserRepository userRepository, 
-            IQuestionRepository questionRepository, 
-            IRoundRepository roundRepository)
+        /// <summary>
+        /// Constructor que inicializa los repositorios (ahora sin factory)
+        /// </summary>
+        public GameService()
         {
-            this.userRepository = userRepository;
-            this.questionRepository = questionRepository;
-            this.roundRepository = roundRepository;
+            // Los repositorios ahora usan el Singleton internamente
+            this.userRepository = new UserRepository();
+            this.questionRepository = new QuestionRepository();
+            this.roundRepository = new RoundRepository();
         }
 
         public int CreateUser(string username)

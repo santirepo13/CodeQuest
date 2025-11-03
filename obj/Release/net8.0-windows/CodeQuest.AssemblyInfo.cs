@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8e3866ca1d3ffe8f4c7689204104cbde4c5c680f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+343db86db298338f0e9c2a3ca23c534ffc1483a5")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -84,32 +84,72 @@ Bonificación por Tiempo:
 ```
 
 ## Tecnologías Utilizadas
-- **Frontend**: Windows Forms (.NET 6.0)
+- **Frontend**: Windows Forms (.NET 8.0)
 - **Backend**: C#
 - **Base de Datos**: SQL Server Express
 - **ORM**: ADO.NET con SqlClient
+- **Patrones de Diseño**: Singleton, Factory, Repository
 
 ## Estructura del Proyecto
 ```
 CodeQuest/
 ├── Database/
-│   ├── querysinlosadd.sql      # Estructura de BD
-│   └── AddedQuestions.sql      # Preguntas de ejemplo
-├── Program.cs                  # Punto de entrada
-├── DatabaseHelper.cs           # Conexión y operaciones básicas de BD
-├── GameHelper.cs              # Lógica del juego y operaciones complejas
-├── FormInicio.cs              # Formulario de inicio
-├── FormRonda.cs               # Formulario de preparación de ronda
-├── FormPreguntas.cs           # Formulario de preguntas
-├── FormResultadoRonda.cs      # Formulario de resultados por ronda
-├── FormResultadosFinales.cs   # Formulario de resultados finales
-├── FormRanking.cs             # Formulario de ranking
+│   ├── querysinlosadd.sql      # Estructura de BD y procedimientos
+│   ├── AddedQuestions.sql      # Preguntas de ejemplo
+│   └── DbConnection.cs         # 🔥 Patrón Singleton para conexiones
+├── Models/
+│   ├── User.cs                 # Modelo de usuario (Encapsulamiento)
+│   ├── Question.cs             # Modelo de pregunta (Encapsulamiento)
+│   └── Round.cs                # Modelos de ronda y resultado
+├── Repositories/
+│   ├── IUserRepository.cs      # Interfaz (Abstracción)
+│   ├── UserRepository.cs       # Repositorio de usuarios
+│   ├── QuestionRepository.cs   # Repositorio de preguntas
+│   └── RoundRepository.cs      # Repositorio de rondas
+├── Services/
+│   ├── IGameService.cs         # Interfaz del servicio
+│   └── GameService.cs          # Servicio principal del juego
+├── Validators/
+│   ├── BaseValidator.cs        # Clase base abstracta (Herencia)
+│   └── UsernameValidator.cs    # Validador específico (Polimorfismo)
+├── Factories/
+│   └── ServiceFactory.cs       # Factory de servicios
+├── Utils/
+│   └── SafeConverter.cs        # Conversiones seguras de tipos
+
+├── Forms/
+│   ├── FormInicio.cs           # Formulario de inicio
+│   ├── FormRonda.cs            # Formulario de preparación de ronda
+│   ├── FormPreguntas.cs        # Formulario de preguntas
+│   ├── FormResultadoRonda.cs   # Formulario de resultados por ronda
+│   ├── FormResultadosFinales.cs # Formulario de resultados finales
+│   └── FormRanking.cs          # Formulario de ranking
+├── Program.cs                  # Punto de entrada con pruebas
 └── CodeQuest.csproj           # Archivo de proyecto
 ```
 
+### 🎯 Patrón Singleton Implementado
+- **Clase**: `DbConnection`
+- **Ubicación**: `Database/DbConnection.cs`
+- **Características**:
+  - ✅ Thread-safe (doble verificación con lock)
+  - ✅ Única instancia de conexión
+  - ✅ Lazy initialization
+  - ✅ Métodos de prueba y validación
+  - ✅ Usado por todos los repositorios
+
 ## Características Técnicas
+
+### Patrones de Diseño Implementados
+- **Patrón Singleton**: `DbConnection` - Única instancia de conexión a BD (thread-safe)
+- **Patrón Factory**: `ServiceFactory` - Creación centralizada de servicios
+- **Patrón Repository**: Abstracción del acceso a datos
+- **4 Pilares de POO**: Abstracción, Encapsulamiento, Herencia, Polimorfismo
+
+### Otras Características
 - **Validación de entrada**: Previene caracteres inválidos y entradas vacías
 - **Manejo de errores**: Try-catch en operaciones de base de datos
+- **Comentarios XML**: Documentación completa de métodos y clases
 - **Interfaz intuitiva**: Diseño limpio con colores y fuentes apropiadas
 - **Navegación fluida**: Transiciones suaves entre formularios
 - **Persistencia de datos**: Almacenamiento completo en base de datos

@@ -1,25 +1,29 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
-using CodeQuest.Factories;
+using CodeQuest.Database;
 using CodeQuest.Models;
 using CodeQuest.Utils;
 
 namespace CodeQuest.Repositories
 {
+    /// <summary>
+    /// Repositorio para operaciones de preguntas usando el patrón Singleton para conexiones
+    /// </summary>
     public class QuestionRepository : IQuestionRepository
     {
-        private readonly IDatabaseConnectionFactory connectionFactory;
-
-        public QuestionRepository(IDatabaseConnectionFactory connectionFactory)
+        /// <summary>
+        /// Constructor que usa el Singleton DbConnection
+        /// </summary>
+        public QuestionRepository()
         {
-            this.connectionFactory = connectionFactory;
+            // No necesita parámetros ya que usa el Singleton
         }
 
         public List<Question> GetQuestionsByDifficulty(int difficulty, int count = 3)
         {
             var questions = new List<Question>();
             
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 
@@ -61,7 +65,7 @@ namespace CodeQuest.Repositories
         {
             var choices = new List<Choice>();
             
-            using (var connection = connectionFactory.CreateConnection())
+            using (var connection = DbConnection.GetConnection())
             {
                 connection.Open();
                 
