@@ -6,7 +6,7 @@ namespace CodeQuest
 {
     public static class DatabaseHelper
     {
-        private static readonly string connectionString = @"Server=DESKTOP-FN66L1D\SQLEXPRESS;Database=CodeQuest;Integrated Security=true;";
+        private static readonly string connectionString = @"Server=DESKTOP-FN66L1D\SQLEXPRESS;Database=CodeQuest;Integrated Security=true;TrustServerCertificate=true;";
 
         public static SqlConnection GetConnection()
         {
