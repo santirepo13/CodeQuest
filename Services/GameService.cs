@@ -75,5 +75,37 @@ namespace CodeQuest.Services
         {
             return userRepository.GetUserById(userId);
         }
+
+        // Métodos administrativos para el ranking
+        /// <summary>
+        /// Actualiza el nombre de un usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <param name="newUsername">Nuevo nombre</param>
+        /// <returns>True si se actualizó correctamente</returns>
+        public bool UpdateUsername(int userId, string newUsername)
+        {
+            return userRepository.UpdateUsername(userId, newUsername);
+        }
+
+        /// <summary>
+        /// Elimina completamente un usuario del ranking
+        /// </summary>
+        /// <param name="userId">ID del usuario a eliminar</param>
+        /// <returns>True si se eliminó correctamente</returns>
+        public bool DeleteUserFromRanking(int userId)
+        {
+            return userRepository.DeleteUserComplete(userId);
+        }
+
+        /// <summary>
+        /// Resetea el XP de un usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <returns>True si se reseteó correctamente</returns>
+        public bool ResetUserXP(int userId)
+        {
+            return userRepository.ResetUserXP(userId);
+        }
     }
 }

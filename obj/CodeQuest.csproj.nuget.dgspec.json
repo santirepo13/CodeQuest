@@ -53,6 +53,10 @@
             "Microsoft.Data.SqlClient": {
               "target": "Package",
               "version": "[5.2.0, )"
+            },
+            "Microsoft.VisualBasic": {
+              "target": "Package",
+              "version": "[10.3.0, )"
             }
           },
           "imports": [

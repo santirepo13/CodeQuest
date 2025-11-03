@@ -21,5 +21,28 @@ namespace CodeQuest.Services
         // Statistics
         DataTable GetTopRanking();
         User GetUserStats(int userId);
+
+        // Admin operations for ranking
+        /// <summary>
+        /// Actualiza el nombre de un usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <param name="newUsername">Nuevo nombre</param>
+        /// <returns>True si se actualizó correctamente</returns>
+        bool UpdateUsername(int userId, string newUsername);
+
+        /// <summary>
+        /// Elimina completamente un usuario del ranking
+        /// </summary>
+        /// <param name="userId">ID del usuario a eliminar</param>
+        /// <returns>True si se eliminó correctamente</returns>
+        bool DeleteUserFromRanking(int userId);
+
+        /// <summary>
+        /// Resetea el XP de un usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <returns>True si se reseteó correctamente</returns>
+        bool ResetUserXP(int userId);
     }
 }

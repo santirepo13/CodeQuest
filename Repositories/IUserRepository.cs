@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using CodeQuest.Models;
 
 namespace CodeQuest.Repositories
@@ -36,5 +37,48 @@ namespace CodeQuest.Repositories
         /// <param name="userId">ID del usuario</param>
         /// <returns>Objeto User con toda la información o null si no existe</returns>
         User GetUserById(int userId);
+
+        /// <summary>
+        /// Actualiza la información de un usuario
+        /// </summary>
+        /// <param name="user">Usuario con la información actualizada</param>
+        /// <returns>True si se actualizó correctamente</returns>
+        bool UpdateUser(User user);
+
+        /// <summary>
+        /// Elimina un usuario de la base de datos
+        /// </summary>
+        /// <param name="userId">ID del usuario a eliminar</param>
+        /// <returns>True si se eliminó correctamente</returns>
+        bool DeleteUser(int userId);
+
+        /// <summary>
+        /// Obtiene todos los usuarios (para administración)
+        /// </summary>
+        /// <returns>Lista de todos los usuarios</returns>
+        List<User> GetAllUsers();
+
+        // Métodos administrativos con procedimientos almacenados
+        /// <summary>
+        /// Actualiza solo el nombre de usuario
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <param name="newUsername">Nuevo nombre de usuario</param>
+        /// <returns>True si se actualizó correctamente</returns>
+        bool UpdateUsername(int userId, string newUsername);
+
+        /// <summary>
+        /// Elimina completamente un usuario y todos sus datos
+        /// </summary>
+        /// <param name="userId">ID del usuario a eliminar</param>
+        /// <returns>True si se eliminó correctamente</returns>
+        bool DeleteUserComplete(int userId);
+
+        /// <summary>
+        /// Resetea el XP de un usuario a 0
+        /// </summary>
+        /// <param name="userId">ID del usuario</param>
+        /// <returns>True si se reseteó correctamente</returns>
+        bool ResetUserXP(int userId);
     }
 }

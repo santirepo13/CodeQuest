@@ -138,12 +138,35 @@ CodeQuest/
   - ✅ Métodos de prueba y validación
   - ✅ Usado por todos los repositorios
 
+### 🗄️ Patrón Repository Implementado
+- **Repositorios**: `UserRepository`, `QuestionRepository`, `RoundRepository`
+- **Ubicación**: `Repositories/`
+- **Características**:
+  - ✅ 3 repositorios por entidad (User, Question, Round)
+  - ✅ Métodos CRUD completos (Create, Read, Update, Delete)
+  - ✅ Interfaces para abstracción (IUserRepository, etc.)
+  - ✅ Sin consultas SQL en la interfaz (Forms)
+  - ✅ Validaciones y manejo de errores con try-catch
+  - ✅ Comentarios XML completos
+  - ✅ Usa el Singleton DbConnection
+
+### 🛠️ Funcionalidades CRUD Administrativas
+- **Pantalla de Ranking** con operaciones CRUD completas:
+  - ✅ **Editar Nombre**: Cambiar nombre de usuario (UPDATE)
+  - ✅ **Resetear XP**: Poner XP en 0 (UPDATE)
+  - ✅ **Eliminar Usuario**: Borrar usuario y todos sus datos (DELETE)
+  - ✅ **Refrescar**: Actualizar datos del ranking (READ)
+- **Procedimientos Almacenados**:
+  - `spUser_UpdateUsername` - Actualizar nombre con validaciones
+  - `spUser_DeleteComplete` - Eliminación completa con transacciones
+  - `spUser_ResetXP` - Reset de XP con validaciones
+
 ## Características Técnicas
 
 ### Patrones de Diseño Implementados
 - **Patrón Singleton**: `DbConnection` - Única instancia de conexión a BD (thread-safe)
 - **Patrón Factory**: `ServiceFactory` - Creación centralizada de servicios
-- **Patrón Repository**: Abstracción del acceso a datos
+- **Patrón Repository**: 3 repositorios con CRUD completo (User, Question, Round)
 - **4 Pilares de POO**: Abstracción, Encapsulamiento, Herencia, Polimorfismo
 
 ### Otras Características
