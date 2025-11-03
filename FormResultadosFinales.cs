@@ -3,6 +3,8 @@ using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using CodeQuest.Factories;
+using CodeQuest.Services;
 
 namespace CodeQuest
 {
@@ -16,11 +18,13 @@ namespace CodeQuest
         private Button btnVerRanking;
         private Button btnJugarDeNuevo;
         private Button btnInicio;
+        private readonly IGameService gameService;
 
         public FormResultadosFinales(int userId, string username)
         {
             this.userId = userId;
             this.username = username;
+            gameService = ServiceFactory.GetGameService();
             InitializeComponent();
             LoadUserStats();
         }
@@ -98,69 +102,20 @@ namespace CodeQuest
         {
             try
             {
-                using (var connection = DatabaseHelper.GetConnection())
+                var user = gameService.GetUserStats(userId);
+                if (user != null)
                 {
-                    connection.Open();
-                    
-                    // Get user current stats
-                    string userQuery = "SELECT Username, Xp, Level FROM Users WHERE UserID = @userId";
-                    using (var command = new SqlCommand(userQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("@userId", userId);
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                string user = reader.GetString("Username");
-                                int xp = reader.GetInt32("Xp");
-                                int level = reader.GetInt32("Level");
-                                
-                                reader.Close();
-                                
-                                // Get session stats (last 3 rounds)
-                                string sessionQuery = @"
-                                    SELECT 
-                                        COUNT(*) as RondasJugadas,
-                                        SUM(Score) as PuntuacionTotal,
-                                        SUM(XpEarned) as XpGanado,
-                                        AVG(CAST(Score AS FLOAT)) as PromedioScore
-                                    FROM Rounds 
-                                    WHERE UserID = @userId 
-                                    AND RoundID IN (
-                                        SELECT TOP 3 RoundID 
-                                        FROM Rounds 
-                                        WHERE UserID = @userId 
-                                        ORDER BY StartedAt DESC
-                                    )";
-                                
-                                using (var sessionCommand = new SqlCommand(sessionQuery, connection))
-                                {
-                                    sessionCommand.Parameters.AddWithValue("@userId", userId);
-                                    using (var sessionReader = sessionCommand.ExecuteReader())
-                                    {
-                                        if (sessionReader.Read())
-                                        {
-                                            int rondasJugadas = sessionReader.GetInt32("RondasJugadas");
-                                            int puntuacionTotal = sessionReader.IsDBNull("PuntuacionTotal") ? 0 : sessionReader.GetInt32("PuntuacionTotal");
-                                            int xpGanado = sessionReader.IsDBNull("XpGanado") ? 0 : sessionReader.GetInt32("XpGanado");
-                                            double promedioScore = sessionReader.IsDBNull("PromedioScore") ? 0 : sessionReader.GetDouble("PromedioScore");
-                                            
-                                            lblEstadisticas.Text = $"Jugador: {user}\n\n" +
-                                                                 $"=== ESTADÍSTICAS DE ESTA SESIÓN ===\n" +
-                                                                 $"Rondas completadas: {rondasJugadas}\n" +
-                                                                 $"Puntuación total: {puntuacionTotal} puntos\n" +
-                                                                 $"XP ganado en esta sesión: {xpGanado} XP\n" +
-                                                                 $"Promedio de puntuación: {promedioScore:F1}\n\n" +
-                                                                 $"=== ESTADÍSTICAS TOTALES ===\n" +
-                                                                 $"XP total: {xp} XP\n" +
-                                                                 $"Nivel actual: {level}\n" +
-                                                                 $"XP para siguiente nivel: {((level * 100) - xp)} XP";
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    lblEstadisticas.Text = $"Jugador: {user.Username}\n\n" +
+                                         $"=== ESTADÍSTICAS TOTALES ===\n" +
+                                         $"XP total: {user.Xp} XP\n" +
+                                         $"Nivel actual: {user.Level}\n" +
+                                         $"XP para siguiente nivel: {((user.Level * 100) - user.Xp)} XP\n\n" +
+                                         $"¡Felicidades por completar las 3 rondas!\n" +
+                                         $"Continúa jugando para subir de nivel.";
+                }
+                else
+                {
+                    lblEstadisticas.Text = "Error al cargar estadísticas del usuario.";
                 }
             }
             catch (Exception ex)

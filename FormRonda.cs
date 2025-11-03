@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using CodeQuest.Factories;
+using CodeQuest.Services;
 
 namespace CodeQuest
 {
@@ -14,11 +16,13 @@ namespace CodeQuest
         private Label lblRondaInfo;
         private Label lblInstrucciones;
         private Button btnIniciarRonda;
+        private readonly IGameService gameService;
 
         public FormRonda(int userId, string username)
         {
             this.userId = userId;
             this.username = username;
+            gameService = ServiceFactory.GetGameService();
             InitializeComponent();
         }
 
@@ -99,10 +103,10 @@ namespace CodeQuest
             try
             {
                 // Create new round in database
-                int roundId = GameHelper.CreateRound(userId);
+                int roundId = gameService.StartNewRound(userId);
                 
                 // Get questions for this round
-                var questions = GameHelper.GetQuestionsForRound(currentRound);
+                var questions = gameService.GetQuestionsForRound(currentRound);
                 
                 if (questions.Count == 3)
                 {

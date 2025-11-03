@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using CodeQuest.Factories;
+using CodeQuest.Services;
+using CodeQuest.Models;
 
 namespace CodeQuest
 {
@@ -14,6 +17,7 @@ namespace CodeQuest
         private List<Question> questions;
         private int currentQuestionIndex = 0;
         private DateTime questionStartTime;
+        private readonly IGameService gameService;
         
         private Label lblTitulo;
         private Label lblProgreso;
@@ -31,6 +35,7 @@ namespace CodeQuest
             this.roundId = roundId;
             this.roundNumber = roundNumber;
             this.questions = questions;
+            gameService = ServiceFactory.GetGameService();
             InitializeComponent();
             LoadQuestion();
         }
@@ -183,7 +188,7 @@ namespace CodeQuest
             {
                 // Submit answer
                 var currentQuestion = questions[currentQuestionIndex];
-                GameHelper.SubmitAnswer(roundId, currentQuestion.QuestionID, selectedChoice.ChoiceID, timeSpent);
+                gameService.SubmitAnswer(roundId, currentQuestion.QuestionID, selectedChoice.ChoiceID, timeSpent);
                 
                 currentQuestionIndex++;
                 
@@ -210,7 +215,7 @@ namespace CodeQuest
         {
             try
             {
-                var result = GameHelper.CloseRound(roundId);
+                var result = gameService.CompleteRound(roundId);
                 
                 if (result != null)
                 {

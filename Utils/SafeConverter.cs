@@ -1,6 +1,6 @@
 using System;
 
-namespace CodeQuest
+namespace CodeQuest.Utils
 {
     public static class SafeConverter
     {

@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using CodeQuest.Factories;
+using CodeQuest.Services;
 
 namespace CodeQuest
 {
@@ -10,9 +12,11 @@ namespace CodeQuest
         private Button btnComenzar;
         private Label lblTitulo;
         private Label lblInstrucciones;
+        private readonly IGameService gameService;
 
         public FormInicio()
         {
+            gameService = ServiceFactory.GetGameService();
             InitializeComponent();
         }
 
@@ -114,15 +118,15 @@ namespace CodeQuest
                 int userId;
                 
                 // Check if user exists, if not create new user
-                if (DatabaseHelper.UserExists(username))
+                if (gameService.UserExists(username))
                 {
-                    userId = DatabaseHelper.GetUserId(username);
+                    userId = gameService.GetUserId(username);
                     MessageBox.Show($"¡Bienvenido de vuelta, {username}!", "Usuario Encontrado", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 else
                 {
-                    userId = DatabaseHelper.CreateUser(username);
+                    userId = gameService.CreateUser(username);
                     MessageBox.Show($"¡Usuario creado exitosamente! Bienvenido, {username}!", "Nuevo Usuario", 
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using CodeQuest.Factories;
+using CodeQuest.Services;
 
 namespace CodeQuest
 {
@@ -13,11 +15,13 @@ namespace CodeQuest
         private DataGridView dgvRanking;
         private Button btnJugarDeNuevo;
         private Button btnInicio;
+        private readonly IGameService gameService;
 
         public FormRanking(int userId, string username)
         {
             this.userId = userId;
             this.username = username;
+            gameService = ServiceFactory.GetGameService();
             InitializeComponent();
             LoadRanking();
         }
@@ -92,7 +96,7 @@ namespace CodeQuest
         {
             try
             {
-                var dataTable = GameHelper.GetTopRanking();
+                var dataTable = gameService.GetTopRanking();
                 
                 // Add position column
                 dataTable.Columns.Add("Posición", typeof(int));
