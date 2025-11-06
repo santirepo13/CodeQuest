@@ -73,6 +73,18 @@ Estructura del proyecto
 
 Guía paso a paso (tour visual)
 
+Pre: 
+
+Modos de Inicio del software:
+
+A.  <img src="Screenshots/inicio.png" width="600"/><br/>
+   [`Screenshots/inicio.png`](Screenshots/iniciaropcion1.png:1)
+
+B. <img src="Screenshots/inicio.png" width="600"/><br/>
+   [`Screenshots/inicio.png`](Screenshots/iniciaropcion3.png:1)
+
+
+
 1. Inicio — Pantalla principal
    Una vista rápida del inicio de la aplicación y navegación principal.
 
@@ -108,7 +120,7 @@ Guía paso a paso (tour visual)
    Muestra del flujo de juego (opciones de inicio y pantalla de ronda).
 
    <img src="Screenshots/iniciaropcion1.png" width="600"/><br/>
-   [`Screenshots/iniciaropcion1.png`](Screenshots/iniciaropcion1.png:1)
+   [`Screenshots/iniciaropcion1.png`](Screenshots/ronda.png:1)
 
 7. Resultados finales y pantalla de ronda
    Resumen de puntajes y detalles de la ronda finalizada.
