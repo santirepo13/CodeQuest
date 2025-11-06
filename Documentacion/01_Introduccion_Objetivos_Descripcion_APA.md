@@ -100,14 +100,4 @@ La UI presenta pantallas para inicio/selección, juego por rondas, resultados fi
 - Facilidad de uso percibida (tiempo de aprendizaje < 5 minutos) y satisfacción general > 80% en encuesta breve.
 - Capacidad del panel administrativo para mantener un banco de preguntas vigente y balanceado por dificultad.
 
-### 3.10 Proyección y mejoras futuras
 
-- Banco de preguntas ampliable por categorías y etiquetas; analítica de ítems (dificultad empírica, discriminación).
-- Modo multijugador local o en red, con sincronización de rondas y tablas en tiempo real.
-- Integración con servicios en la nube (Azure SQL / App Services) para despliegue y telemetría.
-- Accesibilidad reforzada (navegación por teclado, lectores de pantalla, contrastes configurables).
-
-## Referencias (formato APA sugerido)
-
-American Psychological Association. (2020). Publication manual of the American Psychological Association (7th ed.). APA.  
-Pressman, R. S., & Maxim, B. R. (2020). Ingeniería de software: Un enfoque práctico (9.ª ed.). McGraw-Hill.
