@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92c58978196898791a3a69b01351ce3a2a9a528a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77338f231540ae403cf3feac5b391174bfbec889")]
 [assembly: System.Reflection.AssemblyProductAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CodeQuest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
