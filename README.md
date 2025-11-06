@@ -77,10 +77,13 @@ Pre:
 
 Modos de Inicio del software:
 
-A.  <img src="Screenshots/inicio.png" width="600"/><br/>
+A. Modo 1
+
+ <img src="Screenshots/inicio.png" width="600"/><br/>
    [`Screenshots/inicio.png`](Screenshots/iniciaropcion1.png:1)
 
-B. <img src="Screenshots/inicio.png" width="600"/><br/>
+B. Modo 2 
+<img src="Screenshots/inicio.png" width="600"/><br/>
    [`Screenshots/inicio.png`](Screenshots/iniciaropcion3.png:1)
 
 
