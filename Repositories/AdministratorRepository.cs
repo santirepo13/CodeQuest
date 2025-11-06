@@ -54,7 +54,7 @@ namespace CodeQuest.Repositories
                 using (var connection = DbConnection.GetConnection())
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("spAdministrator_New", connection))
+                    using (var command = new SqlCommand("spAdministrator_Create", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Username", username);
@@ -232,7 +232,7 @@ namespace CodeQuest.Repositories
                 using (var connection = DbConnection.GetConnection())
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("spAdministrator_Authenticate", connection))
+                    using (var command = new SqlCommand("spAdministrator_Login", connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Username", username);

@@ -46,7 +46,7 @@ namespace CodeQuest.Factories
         }
 
         /// <summary>
-        /// Obtiene la instancia del servicio de administración (thread-safe)
+        /// Obtiene la instancia del servicio de administración 
         /// Usa el patrón Singleton DbConnection internamente
         /// </summary>
         /// <returns>Instancia del servicio de administración</returns>
