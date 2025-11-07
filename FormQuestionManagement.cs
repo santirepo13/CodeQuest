@@ -64,21 +64,21 @@ namespace CodeQuest
             btnManageOptions = new Button();
             btnManageOptions.Text = "Gestionar Opciones";
             btnManageOptions.Size = new Size(140, 36);
-            btnManageOptions.Location = new Point(485, 420);
+            btnManageOptions.Location = new Point(330, 420);
             btnManageOptions.Click += BtnManageOptions_Click;
             this.Controls.Add(btnManageOptions);
  
             btnDeleteQuestion = new Button();
             btnDeleteQuestion.Text = "Eliminar Pregunta";
             btnDeleteQuestion.Size = new Size(140, 36);
-            btnDeleteQuestion.Location = new Point(640, 420);
+            btnDeleteQuestion.Location = new Point(485, 420);
             btnDeleteQuestion.Click += BtnDeleteQuestion_Click;
             this.Controls.Add(btnDeleteQuestion);
  
             btnRefresh = new Button();
             btnRefresh.Text = "Refrescar";
             btnRefresh.Size = new Size(120, 36);
-            btnRefresh.Location = new Point(795, 420);
+            btnRefresh.Location = new Point(640, 420);
             btnRefresh.Click += (s, e) => LoadQuestions();
             this.Controls.Add(btnRefresh);
  
