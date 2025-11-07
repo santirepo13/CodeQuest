@@ -23,6 +23,10 @@ namespace CodeQuest
         private Button btnBackToStart;
         private Button btnManageAdmins;
         private Button btnManageQuestions;
+
+        // Responsive layout containers
+        private Panel pnlToolsBar;   // Editar/Resetear/Eliminar/Refrescar
+        private Panel pnlBottomBar;  // Preguntas/Administradores/Volver/Cerrar Sesión
         
         private readonly IGameService gameService;
         private readonly IAdministratorService administratorService;
@@ -42,10 +46,28 @@ namespace CodeQuest
             
             // Form properties
             this.Text = "CodeQuest - Panel de Administración";
-            this.Size = new Size(1200, 800);
+            this.Size = new Size(1200, 720);
+            this.MinimumSize = new Size(1024, 650);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.FormBorderStyle = FormBorderStyle.Sizable;
             this.BackColor = Color.FromArgb(240, 248, 255);
+            this.Resize += (s, e) => LayoutControls();
+
+            // Panels for bottom toolbars (avoid overlap at 1366x768)
+            pnlBottomBar = new Panel();
+            pnlBottomBar.Height = 60;
+            pnlBottomBar.Dock = DockStyle.Bottom;
+            pnlBottomBar.BackColor = Color.Transparent;
+
+            pnlToolsBar = new Panel();
+            pnlToolsBar.Height = 55;
+            pnlToolsBar.Dock = DockStyle.Bottom;
+            pnlToolsBar.BackColor = Color.Transparent;
+
+            // Add in order so bottom bar stays at the very bottom, tools bar above
+            this.Controls.Add(pnlBottomBar);
+            this.Controls.Add(pnlToolsBar);
 
             // Title label
             lblTitulo = new Label();
@@ -65,6 +87,7 @@ namespace CodeQuest
             lblUserInfo.Size = new Size(300, 30);
             lblUserInfo.Location = new Point(650, 25);
             lblUserInfo.TextAlign = ContentAlignment.MiddleRight;
+            lblUserInfo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             this.Controls.Add(lblUserInfo);
 
             // DataGridView for users
@@ -82,6 +105,7 @@ namespace CodeQuest
             dgvUsers.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvUsers.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
             dgvUsers.EnableHeadersVisualStyles = false;
+            dgvUsers.Dock = DockStyle.Fill;
             this.Controls.Add(dgvUsers);
 
             // User management buttons
@@ -93,6 +117,7 @@ namespace CodeQuest
             btnEditUser.BackColor = Color.FromArgb(255, 165, 0);
             btnEditUser.ForeColor = Color.White;
             btnEditUser.FlatStyle = FlatStyle.Flat;
+            btnEditUser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnEditUser.Click += BtnEditUser_Click;
             this.Controls.Add(btnEditUser);
 
@@ -104,6 +129,7 @@ namespace CodeQuest
             btnResetXP.BackColor = Color.FromArgb(255, 140, 0);
             btnResetXP.ForeColor = Color.White;
             btnResetXP.FlatStyle = FlatStyle.Flat;
+            btnResetXP.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnResetXP.Click += BtnResetXP_Click;
             this.Controls.Add(btnResetXP);
 
@@ -115,6 +141,7 @@ namespace CodeQuest
             btnDeleteUser.BackColor = Color.FromArgb(220, 20, 60);
             btnDeleteUser.ForeColor = Color.White;
             btnDeleteUser.FlatStyle = FlatStyle.Flat;
+            btnDeleteUser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnDeleteUser.Click += BtnDeleteUser_Click;
             this.Controls.Add(btnDeleteUser);
 
@@ -126,6 +153,7 @@ namespace CodeQuest
             btnRefreshUsers.BackColor = Color.FromArgb(34, 139, 34);
             btnRefreshUsers.ForeColor = Color.White;
             btnRefreshUsers.FlatStyle = FlatStyle.Flat;
+            btnRefreshUsers.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnRefreshUsers.Click += (s, e) => LoadUserData();
             this.Controls.Add(btnRefreshUsers);
 
@@ -138,6 +166,7 @@ namespace CodeQuest
             btnLogout.BackColor = Color.FromArgb(220, 20, 60);
             btnLogout.ForeColor = Color.White;
             btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Anchor = AnchorStyles.Bottom;
             btnLogout.Click += BtnLogout_Click;
             this.Controls.Add(btnLogout);
 
@@ -150,6 +179,7 @@ namespace CodeQuest
             btnBackToStart.BackColor = Color.FromArgb(70, 130, 180);
             btnBackToStart.ForeColor = Color.White;
             btnBackToStart.FlatStyle = FlatStyle.Flat;
+            btnBackToStart.Anchor = AnchorStyles.Bottom;
             btnBackToStart.Click += BtnBackToStart_Click;
             this.Controls.Add(btnBackToStart);
 
@@ -162,6 +192,7 @@ namespace CodeQuest
             btnManageAdmins.BackColor = Color.FromArgb(70, 130, 180);
             btnManageAdmins.ForeColor = Color.White;
             btnManageAdmins.FlatStyle = FlatStyle.Flat;
+            btnManageAdmins.Anchor = AnchorStyles.Bottom;
             btnManageAdmins.Click += BtnManageAdmins_Click;
             this.Controls.Add(btnManageAdmins);
 
@@ -174,10 +205,16 @@ namespace CodeQuest
             btnManageQuestions.BackColor = Color.FromArgb(70, 130, 180);
             btnManageQuestions.ForeColor = Color.White;
             btnManageQuestions.FlatStyle = FlatStyle.Flat;
+            btnManageQuestions.Anchor = AnchorStyles.Bottom;
             btnManageQuestions.Click += BtnManageQuestions_Click;
             this.Controls.Add(btnManageQuestions);
 
+            // Place action buttons inside their panels
+            pnlToolsBar.Controls.AddRange(new Control[] { btnEditUser, btnResetXP, btnDeleteUser, btnRefreshUsers });
+            pnlBottomBar.Controls.AddRange(new Control[] { btnManageQuestions, btnManageAdmins, btnBackToStart, btnLogout });
+
             this.ResumeLayout(false);
+            LayoutControls();
         }
 
         private void LoadUserData()
@@ -402,6 +439,60 @@ namespace CodeQuest
             FormStart formStart = new FormStart();
             formStart.Show();
             this.Close();
+        }
+
+        // Ajuste responsivo para 1366x768 y redimensionamientos
+        private void LayoutControls()
+        {
+            int margin = 20;
+            int bottomBarHeight = 40;
+            int topToolsHeight = 35;
+            int spacing = 10;
+
+            // Ubicar info de usuario a la derecha superior
+            if (lblUserInfo != null)
+            {
+                lblUserInfo.Location = new Point(this.ClientSize.Width - margin - lblUserInfo.Width, 25);
+            }
+
+            // Y de la barra inferior (botones azules + cerrar sesión)
+            int bottomY = this.ClientSize.Height - bottomBarHeight - margin;
+
+            // Fila de herramientas (Editar/Resetear/Eliminar/Refrescar) justo encima de la barra inferior
+            int toolsY = Math.Max(80, bottomY - topToolsHeight - spacing);
+
+            if (btnEditUser != null && btnResetXP != null && btnDeleteUser != null && btnRefreshUsers != null)
+            {
+                btnEditUser.Location = new Point(margin, toolsY);
+                btnResetXP.Location = new Point(btnEditUser.Right + spacing, toolsY);
+                btnDeleteUser.Location = new Point(btnResetXP.Right + spacing, toolsY);
+                btnRefreshUsers.Location = new Point(btnDeleteUser.Right + spacing, toolsY);
+            }
+
+            // Redimensionar la grilla para terminar por encima de la fila de herramientas
+            if (dgvUsers != null)
+            {
+                int newWidth = Math.Max(400, this.ClientSize.Width - (2 * margin));
+                int newHeight = Math.Max(200, toolsY - dgvUsers.Location.Y - margin);
+                dgvUsers.Size = new Size(newWidth, newHeight);
+                dgvUsers.Location = new Point(margin, dgvUsers.Location.Y);
+            }
+
+            // Centrar barra inferior de acciones
+            if (btnManageQuestions != null && btnManageAdmins != null && btnBackToStart != null && btnLogout != null)
+            {
+                int totalWidth = btnManageQuestions.Width + spacing +
+                                 btnManageAdmins.Width + spacing +
+                                 btnBackToStart.Width + spacing +
+                                 btnLogout.Width;
+
+                int startX = Math.Max(margin, (this.ClientSize.Width - totalWidth) / 2);
+
+                btnManageQuestions.Location = new Point(startX, bottomY);
+                btnManageAdmins.Location = new Point(btnManageQuestions.Right + spacing, bottomY);
+                btnBackToStart.Location = new Point(btnManageAdmins.Right + spacing, bottomY);
+                btnLogout.Location = new Point(btnBackToStart.Right + spacing, bottomY);
+            }
         }
     }
 }

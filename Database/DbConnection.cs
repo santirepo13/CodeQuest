@@ -48,7 +48,7 @@ namespace CodeQuest.Database
         {
             try
             {
-                _connectionString = @"Server=DESKTOP-FN66L1D\SQLEXPRESS;Database=CodeQuest;Integrated Security=true;TrustServerCertificate=true;";
+                _connectionString = @"Server=DESKTOP-2IVSB68\SQLEXPRESS;Database=CodeQuest;Integrated Security=true;TrustServerCertificate=true;";
                 
                 // Validar la cadena de conexión al crear la instancia
                 ValidateConnectionString();

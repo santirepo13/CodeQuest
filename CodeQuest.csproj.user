@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="FormAdminLocker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormAdminManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormFinalResults.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormInformation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormManageOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormQuestionManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormQuestions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormRanking.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormStart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
