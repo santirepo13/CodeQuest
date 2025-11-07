@@ -25,8 +25,10 @@ namespace CodeQuest
         private Button btnManageQuestions;
 
         // Responsive layout containers
-        private Panel pnlToolsBar;   // Editar/Resetear/Eliminar/Refrescar
-        private Panel pnlBottomBar;  // Preguntas/Administradores/Volver/Cerrar Sesión
+        private Panel pnlToolsBar;
+        private Panel pnlBottomBar;
+        private Panel pnlHeader;
+        private Panel pnlCenter;     
         
         private readonly IGameService gameService;
         private readonly IAdministratorService administratorService;
@@ -54,20 +56,35 @@ namespace CodeQuest
             this.BackColor = Color.FromArgb(240, 248, 255);
             this.Resize += (s, e) => LayoutControls();
 
-            // Panels for bottom toolbars (avoid overlap at 1366x768)
-            pnlBottomBar = new Panel();
-            pnlBottomBar.Height = 60;
-            pnlBottomBar.Dock = DockStyle.Bottom;
-            pnlBottomBar.BackColor = Color.Transparent;
+            // Panels for header and bottom toolbars (avoid overlap at 1366x768)
+            pnlHeader = new Panel();
+            pnlHeader.Height = 70;
+            pnlHeader.Dock = DockStyle.Top;
+            pnlHeader.BackColor = Color.FromArgb(224, 235, 255);
+
+            pnlCenter = new Panel();
+            pnlCenter.Dock = DockStyle.None;
+            pnlCenter.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            pnlCenter.BackColor = Color.Transparent;
+            pnlCenter.AutoScroll = true;
+            pnlCenter.Padding = new Padding(0, 8, 0, 8);
 
             pnlToolsBar = new Panel();
             pnlToolsBar.Height = 55;
             pnlToolsBar.Dock = DockStyle.Bottom;
-            pnlToolsBar.BackColor = Color.Transparent;
+            pnlToolsBar.BackColor = Color.FromArgb(224, 235, 255);
 
-            // Add in order so bottom bar stays at the very bottom, tools bar above
-            this.Controls.Add(pnlBottomBar);
+            pnlBottomBar = new Panel();
+            pnlBottomBar.Height = 60;
+            pnlBottomBar.Dock = DockStyle.Bottom;
+            pnlBottomBar.BackColor = Color.FromArgb(224, 235, 255);
+
+            // Add docked containers in order: header (top), tools (above bottom), bottom (edge), center (fill last)
+            // Adding the Fill panel last ensures it gets sized after header and bottom bars.
+            this.Controls.Add(pnlHeader);
             this.Controls.Add(pnlToolsBar);
+            this.Controls.Add(pnlBottomBar);
+            this.Controls.Add(pnlCenter);
 
             // Title label
             lblTitulo = new Label();
@@ -77,7 +94,7 @@ namespace CodeQuest
             lblTitulo.Size = new Size(600, 40);
             lblTitulo.Location = new Point(20, 20);
             lblTitulo.TextAlign = ContentAlignment.MiddleLeft;
-            this.Controls.Add(lblTitulo);
+            pnlHeader.Controls.Add(lblTitulo);
 
             // User info label
             lblUserInfo = new Label();
@@ -88,7 +105,7 @@ namespace CodeQuest
             lblUserInfo.Location = new Point(650, 25);
             lblUserInfo.TextAlign = ContentAlignment.MiddleRight;
             lblUserInfo.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            this.Controls.Add(lblUserInfo);
+            pnlHeader.Controls.Add(lblUserInfo);
 
             // DataGridView for users
             dgvUsers = new DataGridView();
@@ -104,9 +121,15 @@ namespace CodeQuest
             dgvUsers.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(70, 130, 180);
             dgvUsers.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvUsers.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dgvUsers.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgvUsers.EnableHeadersVisualStyles = false;
+            dgvUsers.ColumnHeadersHeight = 36;
+            dgvUsers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dgvUsers.RowHeadersVisible = false;
+            dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvUsers.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
             dgvUsers.Dock = DockStyle.Fill;
-            this.Controls.Add(dgvUsers);
+            pnlCenter.Controls.Add(dgvUsers);
 
             // User management buttons
             btnEditUser = new Button();
@@ -119,7 +142,6 @@ namespace CodeQuest
             btnEditUser.FlatStyle = FlatStyle.Flat;
             btnEditUser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnEditUser.Click += BtnEditUser_Click;
-            this.Controls.Add(btnEditUser);
 
             btnResetXP = new Button();
             btnResetXP.Text = "Resetear XP";
@@ -131,7 +153,6 @@ namespace CodeQuest
             btnResetXP.FlatStyle = FlatStyle.Flat;
             btnResetXP.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnResetXP.Click += BtnResetXP_Click;
-            this.Controls.Add(btnResetXP);
 
             btnDeleteUser = new Button();
             btnDeleteUser.Text = "Eliminar Usuario";
@@ -143,7 +164,6 @@ namespace CodeQuest
             btnDeleteUser.FlatStyle = FlatStyle.Flat;
             btnDeleteUser.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnDeleteUser.Click += BtnDeleteUser_Click;
-            this.Controls.Add(btnDeleteUser);
 
             btnRefreshUsers = new Button();
             btnRefreshUsers.Text = "Refrescar";
@@ -155,7 +175,6 @@ namespace CodeQuest
             btnRefreshUsers.FlatStyle = FlatStyle.Flat;
             btnRefreshUsers.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnRefreshUsers.Click += (s, e) => LoadUserData();
-            this.Controls.Add(btnRefreshUsers);
 
             // Logout button
             btnLogout = new Button();
@@ -168,7 +187,6 @@ namespace CodeQuest
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Anchor = AnchorStyles.Bottom;
             btnLogout.Click += BtnLogout_Click;
-            this.Controls.Add(btnLogout);
 
             // Back to start button
             btnBackToStart = new Button();
@@ -181,7 +199,6 @@ namespace CodeQuest
             btnBackToStart.FlatStyle = FlatStyle.Flat;
             btnBackToStart.Anchor = AnchorStyles.Bottom;
             btnBackToStart.Click += BtnBackToStart_Click;
-            this.Controls.Add(btnBackToStart);
 
             // Administrators management button
             btnManageAdmins = new Button();
@@ -194,7 +211,6 @@ namespace CodeQuest
             btnManageAdmins.FlatStyle = FlatStyle.Flat;
             btnManageAdmins.Anchor = AnchorStyles.Bottom;
             btnManageAdmins.Click += BtnManageAdmins_Click;
-            this.Controls.Add(btnManageAdmins);
 
             // Questions management button
             btnManageQuestions = new Button();
@@ -207,11 +223,12 @@ namespace CodeQuest
             btnManageQuestions.FlatStyle = FlatStyle.Flat;
             btnManageQuestions.Anchor = AnchorStyles.Bottom;
             btnManageQuestions.Click += BtnManageQuestions_Click;
-            this.Controls.Add(btnManageQuestions);
 
             // Place action buttons inside their panels
             pnlToolsBar.Controls.AddRange(new Control[] { btnEditUser, btnResetXP, btnDeleteUser, btnRefreshUsers });
             pnlBottomBar.Controls.AddRange(new Control[] { btnManageQuestions, btnManageAdmins, btnBackToStart, btnLogout });
+
+            // Docking order is set by the order we add panels; no manual Z-order adjustments required.
 
             this.ResumeLayout(false);
             LayoutControls();
@@ -238,25 +255,32 @@ namespace CodeQuest
                 // Configure columns
                 if (dgvUsers.Columns.Count > 0)
                 {
-                    dgvUsers.Columns["Posición"].Width = 60;
-                    dgvUsers.Columns["Username"].HeaderText = "Jugador";
-                    dgvUsers.Columns["Username"].Width = 150;
-                    dgvUsers.Columns["Xp"].HeaderText = "XP Total";
-                    dgvUsers.Columns["Xp"].Width = 80;
-                    dgvUsers.Columns["Level"].HeaderText = "Nivel";
-                    dgvUsers.Columns["Level"].Width = 60;
-                    dgvUsers.Columns["RondasJugadas"].HeaderText = "Rondas";
-                    dgvUsers.Columns["RondasJugadas"].Width = 60;
-                    dgvUsers.Columns["ScorePromedio"].HeaderText = "Promedio";
-                    dgvUsers.Columns["ScorePromedio"].Width = 80;
-                    dgvUsers.Columns["ScorePromedio"].DefaultCellStyle.Format = "F1";
-                    
-                    if (dgvUsers.Columns["UltimaRonda"] != null)
-                    {
-                        dgvUsers.Columns["UltimaRonda"].HeaderText = "Última Ronda";
-                        dgvUsers.Columns["UltimaRonda"].Width = 120;
-                        dgvUsers.Columns["UltimaRonda"].DefaultCellStyle.Format = "dd/MM/yyyy";
-                    }
+                    // Use Fill weights instead of fixed widths so it scales to 1366x768 and resizes nicely
+                    dgvUsers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dgvUsers.RowHeadersVisible = false;
+
+                    DataGridViewColumn col;
+
+                    col = dgvUsers.Columns["Posición"];
+                    if (col != null) { col.HeaderText = "Posición"; col.FillWeight = 8; col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; }
+
+                    col = dgvUsers.Columns["Username"];
+                    if (col != null) { col.HeaderText = "Jugador"; col.FillWeight = 20; }
+
+                    col = dgvUsers.Columns["Xp"];
+                    if (col != null) { col.HeaderText = "XP Total"; col.FillWeight = 12; col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight; }
+
+                    col = dgvUsers.Columns["Level"];
+                    if (col != null) { col.HeaderText = "Nivel"; col.FillWeight = 10; col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; }
+
+                    col = dgvUsers.Columns["RondasJugadas"];
+                    if (col != null) { col.HeaderText = "Rondas"; col.FillWeight = 10; col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; }
+
+                    col = dgvUsers.Columns["ScorePromedio"];
+                    if (col != null) { col.HeaderText = "Promedio"; col.DefaultCellStyle.Format = "F1"; col.FillWeight = 12; col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight; }
+
+                    col = dgvUsers.Columns["UltimaRonda"];
+                    if (col != null) { col.HeaderText = "Última Ronda"; col.DefaultCellStyle.Format = "dd/MM/yyyy"; col.FillWeight = 18; }
                 }
             }
             catch (Exception ex)
@@ -441,57 +465,77 @@ namespace CodeQuest
             this.Close();
         }
 
-        // Ajuste responsivo para 1366x768 y redimensionamientos
+        // Ajuste responsivo para 1366x768 y redimensionamientos (basado en paneles dockeados)
         private void LayoutControls()
         {
             int margin = 20;
-            int bottomBarHeight = 40;
-            int topToolsHeight = 35;
             int spacing = 10;
-
-            // Ubicar info de usuario a la derecha superior
-            if (lblUserInfo != null)
+    
+            // Header: posicionar título a la izquierda y usuario a la derecha dentro del panel superior
+            if (pnlHeader != null)
             {
-                lblUserInfo.Location = new Point(this.ClientSize.Width - margin - lblUserInfo.Width, 25);
+                if (lblTitulo != null)
+                {
+                    int yTitle = Math.Max(0, (pnlHeader.ClientSize.Height - lblTitulo.Height) / 2);
+                    lblTitulo.Location = new Point(margin, yTitle);
+                }
+    
+                if (lblUserInfo != null)
+                {
+                    int yUser = Math.Max(0, (pnlHeader.ClientSize.Height - lblUserInfo.Height) / 2);
+                    int xUser = Math.Max(margin, pnlHeader.ClientSize.Width - margin - lblUserInfo.Width);
+                    lblUserInfo.Location = new Point(xUser, yUser);
+                }
             }
-
-            // Y de la barra inferior (botones azules + cerrar sesión)
-            int bottomY = this.ClientSize.Height - bottomBarHeight - margin;
-
-            // Fila de herramientas (Editar/Resetear/Eliminar/Refrescar) justo encima de la barra inferior
-            int toolsY = Math.Max(80, bottomY - topToolsHeight - spacing);
-
-            if (btnEditUser != null && btnResetXP != null && btnDeleteUser != null && btnRefreshUsers != null)
+    
+            // Tools bar: alinear a la izquierda dentro del panel inmediatamente superior al grid
+            if (pnlToolsBar != null && btnEditUser != null)
             {
-                btnEditUser.Location = new Point(margin, toolsY);
-                btnResetXP.Location = new Point(btnEditUser.Right + spacing, toolsY);
-                btnDeleteUser.Location = new Point(btnResetXP.Right + spacing, toolsY);
-                btnRefreshUsers.Location = new Point(btnDeleteUser.Right + spacing, toolsY);
+                int y = Math.Max(0, (pnlToolsBar.ClientSize.Height - btnEditUser.Height) / 2);
+                int x = margin;
+    
+                btnEditUser.Location = new Point(x, y); x = btnEditUser.Right + spacing;
+                if (btnResetXP != null) { btnResetXP.Location = new Point(x, y); x = btnResetXP.Right + spacing; }
+                if (btnDeleteUser != null) { btnDeleteUser.Location = new Point(x, y); x = btnDeleteUser.Right + spacing; }
+                if (btnRefreshUsers != null) { btnRefreshUsers.Location = new Point(x, y); }
             }
-
-            // Redimensionar la grilla para terminar por encima de la fila de herramientas
-            if (dgvUsers != null)
-            {
-                int newWidth = Math.Max(400, this.ClientSize.Width - (2 * margin));
-                int newHeight = Math.Max(200, toolsY - dgvUsers.Location.Y - margin);
-                dgvUsers.Size = new Size(newWidth, newHeight);
-                dgvUsers.Location = new Point(margin, dgvUsers.Location.Y);
-            }
-
-            // Centrar barra inferior de acciones
-            if (btnManageQuestions != null && btnManageAdmins != null && btnBackToStart != null && btnLogout != null)
+    
+            // Bottom bar: centrar botones dentro del panel inferior
+            if (pnlBottomBar != null && btnManageQuestions != null && btnManageAdmins != null && btnBackToStart != null && btnLogout != null)
             {
                 int totalWidth = btnManageQuestions.Width + spacing +
                                  btnManageAdmins.Width + spacing +
                                  btnBackToStart.Width + spacing +
                                  btnLogout.Width;
-
-                int startX = Math.Max(margin, (this.ClientSize.Width - totalWidth) / 2);
-
-                btnManageQuestions.Location = new Point(startX, bottomY);
-                btnManageAdmins.Location = new Point(btnManageQuestions.Right + spacing, bottomY);
-                btnBackToStart.Location = new Point(btnManageAdmins.Right + spacing, bottomY);
-                btnLogout.Location = new Point(btnBackToStart.Right + spacing, bottomY);
+    
+                int startX = Math.Max(margin, (pnlBottomBar.ClientSize.Width - totalWidth) / 2);
+                int y = Math.Max(0, (pnlBottomBar.ClientSize.Height - btnManageQuestions.Height) / 2);
+    
+                btnManageQuestions.Location = new Point(startX, y);
+                btnManageAdmins.Location = new Point(btnManageQuestions.Right + spacing, y);
+                btnBackToStart.Location = new Point(btnManageAdmins.Right + spacing, y);
+                btnLogout.Location = new Point(btnBackToStart.Right + spacing, y);
+            }
+    
+            // Position and size center panel explicitly to avoid overlap with header and bottom bars
+            if (pnlHeader != null && pnlToolsBar != null && pnlBottomBar != null && pnlCenter != null)
+            {
+                int top = pnlHeader.Height;
+                int bottom = pnlToolsBar.Height + pnlBottomBar.Height;
+                pnlCenter.Location = new Point(0, top);
+                pnlCenter.Size = new Size(this.ClientSize.Width, Math.Max(0, this.ClientSize.Height - top - bottom));
+                pnlCenter.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            }
+    
+            // Ensure header and toolbars are on top of the z-order
+            if (pnlHeader != null) pnlHeader.BringToFront();
+            if (pnlToolsBar != null) pnlToolsBar.BringToFront();
+            if (pnlBottomBar != null) pnlBottomBar.BringToFront();
+    
+            // Ensure the DataGridView fills the center panel
+            if (dgvUsers != null && pnlCenter != null)
+            {
+                dgvUsers.Dock = DockStyle.Fill;
             }
         }
     }
